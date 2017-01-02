@@ -128,6 +128,28 @@ describe('OptionsFromRemotingContext', function() {
     });
   });
 
+  it('honours injectOptionsFromRemoteContext in sharedCtor', function() {
+    var settings = {
+      forceId: false,
+      injectOptionsFromRemoteContext: false,
+    };
+    var TestModel = app.registry.createModel('TestModel', {}, settings);
+    app.model(TestModel, {dataSource: 'db'});
+
+    TestModel.prototype.dummy = function(cb) { cb(); };
+    TestModel.remoteMethod('dummy', {isStatic: false});
+
+    observeOptionsOnAccess(TestModel);
+
+    return TestModel.create({id: 1})
+      .then(function() {
+        return request.post('/TestModels/1/dummy').expect(204);
+      })
+      .then(function() {
+        expect(actualOptions).to.eql({});
+      });
+  });
+
   // Catch: because relations methods are defined on "modelFrom",
   // they will invoke createOptionsFromRemotingContext on "modelFrom" too,
   // despite the fact that under the hood a method on "modelTo" is called.
