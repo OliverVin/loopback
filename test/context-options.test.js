@@ -212,10 +212,15 @@ describe('OptionsFromRemotingContext', function() {
     });
 
     function givenCategoryHasManyProductsThroughAnotherModel() {
+      var settings = {
+        forceId: false,
+        replaceOnPUT: true,
+        injectOptionsFromRemoteContext: true,
+      };
       Category = app.registry.createModel(
         'Category',
         {name: String},
-        {forceId: false, replaceOnPUT: true});
+        settings);
 
       app.model(Category, {dataSource: 'db'});
       // This is a shortcut for creating CategoryProduct "through" model
@@ -284,10 +289,15 @@ describe('OptionsFromRemotingContext', function() {
     });
 
     function givenCategoryHasOneProduct() {
+      var settings = {
+        forceId: false,
+        replaceOnPUT: true,
+        injectOptionsFromRemoteContext: true,
+      };
       Category = app.registry.createModel(
         'Category',
         {name: String},
-        {forceId: false, replaceOnPUT: true});
+        settings);
 
       app.model(Category, {dataSource: 'db'});
       Category.hasOne(Product);
@@ -328,10 +338,15 @@ describe('OptionsFromRemotingContext', function() {
     });
 
     function givenCategoryBelongsToProduct() {
+      var settings = {
+        forceId: false,
+        replaceOnPUT: true,
+        injectOptionsFromRemoteContext: true,
+      };
       Category = app.registry.createModel(
         'Category',
         {name: String},
-        {forceId: false, replaceOnPUT: true});
+        settings);
 
       app.model(Category, {dataSource: 'db'});
       Category.belongsTo(Product);
@@ -358,10 +373,16 @@ describe('OptionsFromRemotingContext', function() {
     app = loopback({localRegistry: true});
     app.dataSource('db', {connector: 'memory'});
 
+    var settings = {
+      forceId: false,
+      replaceOnPUT: true,
+      injectOptionsFromRemoteContext: true,
+    };
+
     Product = app.registry.createModel(
       'Product',
       {name: String},
-      {forceId: false, replaceOnPUT: true});
+      settings);
 
     Product.createOptionsFromRemotingContext = function(ctx) {
       return {injectedFrom: 'Product'};
